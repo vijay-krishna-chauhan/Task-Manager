@@ -47,14 +47,14 @@ router.put('/:id', getTask, async (req, res) => {
 });
 
 // Delete task
-router.delete('/:id', getTask, async (req, res) => {
-  try {
-    await res.task.remove();
-    res.json({ message: 'Task deleted' });
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-});
+// router.delete('/:id', getTask, async (req, res) => {
+//   try {
+//     await res.task.remove();
+//     res.json({ message: 'Task deleted' });
+//   } catch (err) {
+//     res.status(500).json({ message: err.message });
+//   }
+// });
 
 // Middleware to get task by ID
 async function getTask(req, res, next) {
@@ -68,5 +68,17 @@ async function getTask(req, res, next) {
   res.task = task;
   next();
 }
+
+router.delete('/:id', async (req, res) => {
+  try {
+    const task = await Task.findByIdAndDelete(req.params.id);
+    if (!task) {
+      return res.status(404).json({ message: 'Task not found' });
+    }
+    res.json({ message: 'Task deleted successfully' });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
 
 module.exports = router;
