@@ -1,31 +1,34 @@
 
+
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+// import dotenv from 'dotenv';
 
 const TaskList = () => {
+
+
   const [tasks, setTasks] = useState([]);
 
-  // Fetch tasks on component mount
   useEffect(() => {
     fetchTasks();
   }, []);
 
-  // Function to fetch tasks from the server
   const fetchTasks = async () => {
     try {
-      const response = await axios.get('http://localhost:5000/tasks');
+      // console.log('Backend Base URL:', process.env.REACT_APP_BACKEND_BASE_URL);
+
+      const response = await axios.get(`${process.env.REACT_APP_BACKEND_BASE_URL}/tasks`);
       setTasks(response.data);
     } catch (error) {
       console.error('Error fetching tasks:', error);
     }
   };
 
-  // Function to delete a task
   const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this task?')) {
       try {
-        await axios.delete(`http://localhost:5000/tasks/${id}`);
+        await axios.delete(`${process.env.REACT_APP_BACKEND_BASE_URL}/tasks/${id}`);
         fetchTasks(); // Refresh the task list after deletion
       } catch (error) {
         console.error('Error deleting task:', error);

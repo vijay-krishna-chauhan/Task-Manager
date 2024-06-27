@@ -1,4 +1,5 @@
 
+
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -12,7 +13,7 @@ const TaskForm = () => {
 
   useEffect(() => {
     if (id) {
-      axios.get(`http://localhost:5000/tasks/${id}`)
+      axios.get(`${process.env.REACT_APP_BACKEND_BASE_URL}/tasks/${id}`)
         .then(response => {
           setTitle(response.data.title);
           setDescription(response.data.description);
@@ -27,11 +28,11 @@ const TaskForm = () => {
     const taskData = { title, description, dueDate };
 
     if (id) {
-      axios.put(`http://localhost:5000/tasks/${id}`, taskData)
+      axios.put(`${process.env.REACT_APP_BACKEND_BASE_URL}/tasks/${id}`, taskData)
         .then(() => navigate('/'))
         .catch(error => console.log(error));
     } else {
-      axios.post('http://localhost:5000/tasks', taskData)
+      axios.post(`${process.env.REACT_APP_BACKEND_BASE_URL}/tasks`, taskData)
         .then(() => navigate('/'))
         .catch(error => console.log(error));
     }
